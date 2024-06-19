@@ -1,4 +1,4 @@
 [{
-	"command":"cat input | /home/op/go/bin/exclude-cdn | tee output",
+	"command":"cat input | /home/cwave/go/bin/exclude-cdn | tee output",
 	"ext":"txt"
 }]

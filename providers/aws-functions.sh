@@ -296,7 +296,7 @@ if [[ "$generate_sshconfig" == "private" ]]; then
  ip=$(echo "$droplets" | jq -r ".Reservations[].Instances[] | select(.Tags?[]?.Value==\"$name\") | .PublicIpAddress")
  status=$(echo "$droplets" | jq -r ".Reservations[].Instances[] | select(.Tags?[]?.Value==\"$name\") | .State.Name")
  if [[ "$status" == "running" ]]; then
- 	echo -e "Host $name\n\tHostName $ip\n\tUser op\n\tPort 2266\n" >> $sshnew
+ 	echo -e "Host $name\n\tHostName $ip\n\tUser cwave\n\tPort 2266\n" >> $sshnew
  fi
  done
  mv $sshnew $AXIOM_PATH/.sshconfig
@@ -313,7 +313,7 @@ if [[ "$generate_sshconfig" == "private" ]]; then
  ip=$(echo "$droplets" | jq -r ".Reservations[].Instances[] | select(.Tags?[]?.Value==\"$name\") | .PublicIpAddress")
  status=$(echo "$droplets" | jq -r ".Reservations[].Instances[] | select(.Tags?[]?.Value==\"$name\") | .State.Name")
  if [[ "$status" == "running" ]]; then
- 	echo -e "Host $name\n\tHostName $ip\n\tUser op\n\tPort 2266\n" >> $sshnew
+ 	echo -e "Host $name\n\tHostName $ip\n\tUser cwave\n\tPort 2266\n" >> $sshnew
  fi
  done
  mv $sshnew $AXIOM_PATH/.sshconfig

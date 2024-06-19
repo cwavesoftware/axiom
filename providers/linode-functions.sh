@@ -279,7 +279,7 @@ generate_sshconfig() {
 
     for name in $(echo "$droplets" | jq -r '.[].label'); do
         ip=$(echo "$droplets" | jq -r ".[] | select(.label==\"$name\") | .ipv4[1]")
-        echo -e "Host $name\n\tHostName $ip\n\tUser op\n\tPort 2266\n" >> $sshnew 
+        echo -e "Host $name\n\tHostName $ip\n\tUser cwave\n\tPort 2266\n" >> $sshnew 
      done
 
     mv $sshnew  $AXIOM_PATH/.sshconfig
@@ -293,7 +293,7 @@ generate_sshconfig() {
 	else
         for name in $(echo "$droplets" | jq -r '.[].label'); do
             ip=$(echo "$droplets" | jq -r ".[] | select(.label==\"$name\") | .ipv4[0]")
-            echo -e "Host $name\n\tHostName $ip\n\tUser op\n\tPort 2266\n" >> $sshnew
+            echo -e "Host $name\n\tHostName $ip\n\tUser cwave\n\tPort 2266\n" >> $sshnew
         done
 	mv $sshnew  $AXIOM_PATH/.sshconfig
     fi

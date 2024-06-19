@@ -71,13 +71,13 @@ axiom-scan provides easy distribution of arbitrary binaries and scripts.
 axiom-scan splits user-provided input files (target lists), wordlists and configuration files and uploads them to a unique scan working directory on the remote instance.
 axiom-scan combines user-provided command-line arguments with commands in the module (~/.axiom/modules) and executes the final command on the remote instance.
 axiom-scan downloads and merges scan output in a variety of different formats, specified by the extension in the module (dir, txt, csv, xml, none).
-individual scanning operations are executed from a detacted tmux session (\$module+\$timestamp) inside a unique scan working directory (/home/op/scan/\$module+\$timestamp) on the remote instances.
+individual scanning operations are executed from a detacted tmux session (\$module+\$timestamp) inside a unique scan working directory (/home/cwave/scan/\$module+\$timestamp) on the remote instances.
 
 Usage:
-   axiom-scan inputfile.txt -m ffuf -w /home/op/wordlist-on-remote-instance
+   axiom-scan inputfile.txt -m ffuf -w /home/cwave/wordlist-on-remote-instance
    axiom-scan inputfile.txt -m ffuf -wL /home/localuser/local-wordlist-to-upload
    axiom-scan inputfile.txt -m ffuf -wD /home/localuser/local-wordlist-to-split-and-upload
-   axiom-scan inputfile.txt -m nuclei -w /home/op/nuclei-templates-on-remote-instances -o outputfile.txt
+   axiom-scan inputfile.txt -m nuclei -w /home/cwave/nuclei-templates-on-remote-instances -o outputfile.txt
    axiom-scan inputfile.txt -m nuclei --nuclei-templates /home/localuser/local-custom-nuclei-template-folder-to-upload/ -o outputfile.txt
    axiom-scan inputfile.txt -m nuclei --local-config /home/localuser/local-custom-nuclei-config-file-to-upload.yaml -anew outputfile.txt
    axiom-scan inputfile.txt -m gowitness -oD screenshots-folder --spinup 10 --rm-when-done
@@ -167,7 +167,7 @@ clean_up() {
     end=$(date +%s)
     runtime=$((end-begin))
     time=$(formatSeconds $runtime)
-    json_stats="{\"scan\":{\"$module\":{\"id\":\"$uid\",\"extra_args\":\"$args\",\"instances\":\"$total_instances\",\"targets\":\"$lines\",\"results\":\"$output_lines\",\"runtime\":\"$time\",\"date\":\"$starttime\",\"command\":$escapedcommand,\"threads\":\"$threads\",\"local_logs\":\"$AXIOM_PATH/logs/$uid\",\"remote_logs\":\"/home/op/scan/$uid\",\"output\":\"$(realpath $outfile)\",\"status\":\"canceled\"}}}" 
+    json_stats="{\"scan\":{\"$module\":{\"id\":\"$uid\",\"extra_args\":\"$args\",\"instances\":\"$total_instances\",\"targets\":\"$lines\",\"results\":\"$output_lines\",\"runtime\":\"$time\",\"date\":\"$starttime\",\"command\":$escapedcommand,\"threads\":\"$threads\",\"local_logs\":\"$AXIOM_PATH/logs/$uid\",\"remote_logs\":\"/home/cwave/scan/$uid\",\"output\":\"$(realpath $outfile)\",\"status\":\"canceled\"}}}" 
     if jq -e . >/dev/null 2>&1 <<<"$json_stats"; then
      echo -e "${Blue}appending axiom-scan runtime statistics to${Color_Off}${BGreen} : $AXIOM_PATH/stats.log${Color_Off}"
      echo "$json_stats" | tee -a $AXIOM_PATH/stats.log  >> /dev/null 2>&1
@@ -176,7 +176,7 @@ clean_up() {
     fi
     echo -e "${BGreen}module: ${Color_Off}[${Blue} $module ${Color_Off}]${BGreen} | ${BGreen}module args: ${Color_Off}[${Blue} $args ${Color_Off}] ${BGreen}| ${BGreen}instances: ${Color_Off}[${Blue} $total_instances ${Color_Off}]${BGreen} | ${BGreen}targets: ${Color_Off}[${Blue} $lines targets ${Color_Off}]${BGreen} | ${BGreen}results: ${Color_Off}[${Blue} $output_lines results ${Color_Off}]${BGreen} |"
     echo -e "${BGreen}runtime: ${Color_Off}[${Blue} $time ${Color_Off}]${BGreen} | ${BGreen}date: ${Color_Off}[${Blue} $starttime ${Color_Off}]${BGreen} | ${BGreen}id: ${Color_Off}[${Blue} "$uid" ${Color_Off}]${BGreen} |"
-    echo -e "${BGreen}output: ${Color_Off}[${Blue} $(realpath $outfile) ${Color_Off}]${BGreen} | ${BGreen}log: ${Color_Off}[${Blue} "$AXIOM_PATH/logs/$uid" ${Color_Off}]${BGreen} | ${BGreen}remote: ${Color_Off}[${Blue} "/home/op/scan/$uid" ${Color_Off}] ${BGreen} |"
+    echo -e "${BGreen}output: ${Color_Off}[${Blue} $(realpath $outfile) ${Color_Off}]${BGreen} | ${BGreen}log: ${Color_Off}[${Blue} "$AXIOM_PATH/logs/$uid" ${Color_Off}]${BGreen} | ${BGreen}remote: ${Color_Off}[${Blue} "/home/cwave/scan/$uid" ${Color_Off}] ${BGreen} |"
     echo -e "${BGreen}command: ${Color_Off}[${Blue} $command ${Color_Off}]${BGreen} | ${BGreen}ext: ${Color_Off}[${Blue} "$ext" ${Color_Off}]${BGreen} | ${BGreen}threads: ${Color_Off}[${Blue} "$threads" ${Color_Off}]${BGreen}"
     rm -r $socket_tmp >/dev/null 2>&1
     stty sane
@@ -190,7 +190,7 @@ clean_up() {
 #
 delete_logs() {
  echo -e "${Blue}deleting remote logs in a backgroud job${Color_Off}"
- $interlace_cmd_nobar -c "$ssh_command _target_ 'sudo rm -r /home/op/scan/${uid}/'"
+ $interlace_cmd_nobar -c "$ssh_command _target_ 'sudo rm -r /home/cwave/scan/${uid}/'"
   if [ -d "$AXIOM_PATH/tmp/$uid/" ] 
    then
    echo -e "${Blue}deleting local logs, except for $AXIOM_PATH/logs/$uid/output/ ${Color_Off}"
@@ -819,7 +819,7 @@ trap clean_up SIGINT SIGTERM
 #  Add default SSH commands
 #  Add ssh socket check and exit commands
 #
-scan_dir="/home/op/scan/$uid"
+scan_dir="/home/cwave/scan/$uid"
 ssh_command="ssh -F $sshconfig -o StrictHostKeyChecking=no"
 ssh_check_command="ssh -F $sshconfig -O check -o StrictHostKeyChecking=no"
 ssh_exit_command="ssh -F $sshconfig -O exit -o StrictHostKeyChecking=no"
@@ -877,7 +877,7 @@ fi
 if [[ "$local_wordlist" != "false" ]]; then
     if [[ -f "$local_wordlist" ]]; then
         local_wordlist_filename="$(echo "$local_wordlist" | tr '/' ' ' | awk '{ print $NF }')"
-        destination_wordlist="/home/op/scan/$uid/$local_wordlist_filename"
+        destination_wordlist="/home/cwave/scan/$uid/$local_wordlist_filename"
         wordlist="$destination_wordlist"
     else
         echo -e "${Red}Error: local wordlist file not found '$local_wordlist'...${Color_Off}"
@@ -887,7 +887,7 @@ fi
 if [[ "$distribute_wordlist" != "false" ]]; then
     if [[ -f "$distribute_wordlist" ]]; then
         distribute_wordlist_filename="$(echo "$distribute_wordlist" | tr '/' ' ' | awk '{ print $NF }')"
-        destination_wordlist="/home/op/scan/$uid/$distribute_wordlist_filename"
+        destination_wordlist="/home/cwave/scan/$uid/$distribute_wordlist_filename"
         wordlist="$destination_wordlist"
     else
         echo -e "${Red}Error: local wordlist to distribute file not found '$distribute_wordlist'...${Color_Off}"
@@ -905,7 +905,7 @@ fi
 if [[ "$local_config" != "false" ]]; then
     if [[ -f "$local_config" ]]; then
         local_config_filename="$(echo "$local_config" | tr '/' ' ' | awk '{ print $NF }')"
-        destination_config="/home/op/scan/$uid/$local_config_filename"
+        destination_config="/home/cwave/scan/$uid/$local_config_filename"
         config_file="$destination_config"
     else
         echo -e "${Red}Error: local config file not found '$local_config'...${Color_Off}"
@@ -917,7 +917,7 @@ fi
 #  If a one-shot module is used:
 #  Prep all the axiom instances by making a unique scan directory 
 #
-echo -e "${BGreen}creating scan working directory at ${Color_Off}${Blue}: /home/op/scan/$uid/${Color_Off}"
+echo -e "${BGreen}creating scan working directory at ${Color_Off}${Blue}: /home/cwave/scan/$uid/${Color_Off}"
 rawcommand="$(parse_module "$module" "$ext" | jq -r '.command')"
 if ([[ "$rawcommand" =~ "_target_" ]] || [[ "$rawcommand" =~  "_safe-target_" ]] || [[ "$ext" ==  "" ]] || [[ "$ext" == "dir" ]]) && [[ "$disable_oneshot" != "true" ]]; then
     $interlace_cmd_nobar -c "$ssh_command _target_ 'mkdir -p $scan_dir/output'" >/dev/null 2>&1
@@ -962,7 +962,7 @@ fi
 if [[ "$nuclei_templates" != "false" ]]; then
 if [[ -d "$nuclei_templates" ]]; then
         local_folder_filename="$(echo "$nuclei_templates" | tr '/' ' ' | awk '{ print $NF }')"
-        destination_folder="/home/op/scan/$uid/$local_folder_filename"
+        destination_folder="/home/cwave/scan/$uid/$local_folder_filename"
         wordlist="$destination_folder"
         echo -e "${BGreen}uploading local folder ( nuclei-templates )${Color_Off}${Blue} : $nuclei_templates${Color_Off} to ${Blue}$destination_folder...${Color_Off}"
         interlace --no-bar --silent -threads $total_instances -tL "$tmp/selected.conf" -c "$AXIOM_PATH/interact/axiom-scp $nuclei_templates _target_:$destination_folder --cache -F=$sshconfig >> /dev/null"
@@ -976,7 +976,7 @@ fi
 if [[ "$local_config" != "false" ]]; then
 if [[ -f "$local_config" ]]; then
     user_config_filename="$(echo "$local_config" | tr '/' ' ' | awk '{ print $NF }')"
-    destination_config="/home/op/scan/$uid/$user_config_filename"
+    destination_config="/home/cwave/scan/$uid/$user_config_filename"
     config_file="$destination_config"
     echo -e "${BGreen}uploading local config file${Color_Off}${Blue} : $local_config${Color_Off} to ${Blue}$destination_config...${Color_Off}"
     interlace --no-bar --silent -threads $total_instances -tL "$tmp/selected.conf" -c "$AXIOM_PATH/interact/axiom-scp $local_config _target_:$destination_config --cache -F=$sshconfig >> /dev/null"
@@ -1234,7 +1234,7 @@ mv "$AXIOM_PATH/tmp/$uid/" "$AXIOM_PATH/logs/"
 #  Display exit stats about the scan such as log directory 
 #  Normalize terminal
 #
-json_stats="{\"scan\":{\"$module\":{\"id\":\"$uid\",\"extra_args\":\"$args\",\"instances\":\"$total_instances\",\"targets\":\"$lines\",\"results\":\"$output_lines\",\"runtime\":\"$time\",\"date\":\"$starttime\",\"command\":$escapedcommand,\"threads\":\"$threads\",\"local_logs\":\"$AXIOM_PATH/logs/$uid\",\"remote_logs\":\"/home/op/scan/$uid\",\"output\":\"$(realpath $outfile)\",\"status\":\"completed\"}}}"
+json_stats="{\"scan\":{\"$module\":{\"id\":\"$uid\",\"extra_args\":\"$args\",\"instances\":\"$total_instances\",\"targets\":\"$lines\",\"results\":\"$output_lines\",\"runtime\":\"$time\",\"date\":\"$starttime\",\"command\":$escapedcommand,\"threads\":\"$threads\",\"local_logs\":\"$AXIOM_PATH/logs/$uid\",\"remote_logs\":\"/home/cwave/scan/$uid\",\"output\":\"$(realpath $outfile)\",\"status\":\"completed\"}}}"
 if jq -e . >/dev/null 2>&1 <<<"$json_stats"; then
  echo -e "${Blue}appending axiom-scan runtime statistics to${Color_Off}${BGreen} : $AXIOM_PATH/stats.log${Color_Off}"
  echo "$json_stats" | tee -a $AXIOM_PATH/stats.log  >> /dev/null 2>&1
@@ -1243,7 +1243,7 @@ else
 fi
 echo -e "${BGreen}module: ${Color_Off}[${Blue} $module ${Color_Off}]${BGreen} | ${BGreen}module args: ${Color_Off}[${Blue} $args ${Color_Off}] ${BGreen}| ${BGreen}instances: ${Color_Off}[${Blue} $total_instances ${Color_Off}]${BGreen} | ${BGreen}targets: ${Color_Off}[${Blue} $lines targets ${Color_Off}]${BGreen} | ${BGreen}results: ${Color_Off}[${Blue} $output_lines results ${Color_Off}]${BGreen} |"
 echo -e "${BGreen}runtime: ${Color_Off}[${Blue} $time ${Color_Off}]${BGreen} | ${BGreen}date: ${Color_Off}[${Blue} $starttime ${Color_Off}]${BGreen} | ${BGreen}id: ${Color_Off}[${Blue} "$uid" ${Color_Off}]${BGreen} |"
-echo -e "${BGreen}output: ${Color_Off}[${Blue} $(realpath $outfile) ${Color_Off}]${BGreen} | ${BGreen}log: ${Color_Off}[${Blue} "$AXIOM_PATH/logs/$uid" ${Color_Off}]${BGreen} | ${BGreen}remote: ${Color_Off}[${Blue} "/home/op/scan/$uid" ${Color_Off}] ${BGreen} |"
+echo -e "${BGreen}output: ${Color_Off}[${Blue} $(realpath $outfile) ${Color_Off}]${BGreen} | ${BGreen}log: ${Color_Off}[${Blue} "$AXIOM_PATH/logs/$uid" ${Color_Off}]${BGreen} | ${BGreen}remote: ${Color_Off}[${Blue} "/home/cwave/scan/$uid" ${Color_Off}] ${BGreen} |"
 echo -e "${BGreen}command: ${Color_Off}[${Blue} $command ${Color_Off}]${BGreen} | ${BGreen}ext: ${Color_Off}[${Blue} "$ext" ${Color_Off}]${BGreen} | ${BGreen}threads: ${Color_Off}[${Blue} "$threads" ${Color_Off}]${BGreen}"
 rm -r $socket_tmp >/dev/null 2>&1
 kill -0 $remotetailPID 2>  /dev/null && kill -9 $remotetailPID  &> /dev/null

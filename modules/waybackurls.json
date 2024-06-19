@@ -1,4 +1,4 @@
 [{
-	"command":"cat input | /home/op/go/bin/waybackurls | tee output",
+	"command":"cat input | /home/cwave/go/bin/waybackurls | tee output",
 	"ext":"txt"
 }]

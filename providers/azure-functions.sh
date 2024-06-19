@@ -279,7 +279,7 @@ generate_sshconfig() {
 	for name in $(echo "$boxes" | jq -r '.[].virtualMachine.name')
 	do 
 		ip=$(echo "$boxes" | jq -r ".[].virtualMachine | select(.name==\"$name\") | .network.publicIpAddresses[].ipAddress")
-		echo -e "Host $name\n\tHostName $ip\n\tUser op\n\tPort 2266\n" >> $sshnew
+		echo -e "Host $name\n\tHostName $ip\n\tUser cwave\n\tPort 2266\n" >> $sshnew
 
 	done
 	mv $sshnew $AXIOM_PATH/.sshconfig

@@ -1,4 +1,4 @@
 [{
-	"command": "/home/op/go/bin/dalfox file input -o output",
+	"command": "/home/cwave/go/bin/dalfox file input -o output",
 	"ext": "txt"
 }]

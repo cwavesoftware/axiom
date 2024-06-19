@@ -2,11 +2,11 @@
 	"name":"example",
 	"description":"Example axiom deployment profile.",
 	"install": [
-        "cat /etc/os-release | tee -a /home/op/log.txt",
-        "uname -a | tee -a /home/op/log.txt"
+        "cat /etc/os-release | tee -a /home/cwave/log.txt",
+        "uname -a | tee -a /home/cwave/log.txt"
 	],
 	"uninstall":[
-		"rm /home/op/log.txt"
+		"rm /home/cwave/log.txt"
 	],
     "notes":"Example profile deployed"
 }

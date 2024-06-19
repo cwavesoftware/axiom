@@ -1,16 +1,16 @@
 export TERM="xterm-256color"
-export ZSH=/home/op/.oh-my-zsh
+export ZSH=/home/cwave/.oh-my-zsh
 export EDITOR='vim'
-export GOPATH=/home/op/go
+export GOPATH=/home/cwave/go
 export TERM="xterm-256color"
-export HOME=/home/op
-export PATH="$PATH:$HOME/.rvm/bin:/home/op/go/bin:/home/op/bin:/home/op/.local/bin:/usr/local/go/bin" # Add RVM to PATH for scripting
-export BIG="/home/op/lists/seclists/Discovery/Web-Content/big.txt"
-export WEB="/home/op/lists/seclists/Discovery/Web-Content/"
-export DIRS_LARGE="/home/op/lists/seclists/Discovery/Web-Content/raft-large-directories.txt"
-export DIRS_SMALL="/home/op/lists/seclists/Discovery/Web-Content/raft-small-directories.txt"
-export FILES_LARGE="/home/op/lists/seclists/Discovery/Web-Content/raft-large-files.txt"
-export FILES_SMALL="/home/op/lists/seclists/Discovery/Web-Content/raft-small-files.txt"
+export HOME=/home/cwave
+export PATH="$PATH:$HOME/.rvm/bin:/home/cwave/go/bin:/home/cwave/bin:/home/cwave/.local/bin:/usr/local/go/bin" # Add RVM to PATH for scripting
+export BIG="/home/cwave/lists/seclists/Discovery/Web-Content/big.txt"
+export WEB="/home/cwave/lists/seclists/Discovery/Web-Content/"
+export DIRS_LARGE="/home/cwave/lists/seclists/Discovery/Web-Content/raft-large-directories.txt"
+export DIRS_SMALL="/home/cwave/lists/seclists/Discovery/Web-Content/raft-small-directories.txt"
+export FILES_LARGE="/home/cwave/lists/seclists/Discovery/Web-Content/raft-large-files.txt"
+export FILES_SMALL="/home/cwave/lists/seclists/Discovery/Web-Content/raft-small-files.txt"
 # added by pipsi (https://github.com/mitsuhiko/pipsi)
 
 # -------------------------------- aliases ---------------------------------

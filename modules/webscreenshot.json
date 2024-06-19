@@ -1,4 +1,4 @@
 [{
-	"command":"/home/op/.local/bin/webscreenshot --no-xserver -r chrome -i input -o output",
+	"command":"/home/cwave/.local/bin/webscreenshot --no-xserver -r chrome -i input -o output",
 	"ext":""
 }]

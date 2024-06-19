@@ -1,4 +1,4 @@
 [{
-	"command":"/home/op/go/bin/puredns resolve input --resolvers /home/op/lists/resolvers.txt | tee output",
+	"command":"/home/cwave/go/bin/puredns resolve input --resolvers /home/cwave/lists/resolvers.txt | tee output",
 	"ext":"txt"
 }]

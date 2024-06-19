@@ -255,7 +255,7 @@ generate_sshconfig() {
 	for name in $(echo "$droplets" | jq -r '.[].name')
 	do 
 		ip=$(echo "$droplets" | jq -r ".[] | select(.name==\"$name\") | .networkInterfaces[].accessConfigs[].natIP")
-		echo -e "Host $name\n\tHostName $ip\n\tUser op\n\tPort 2266\n" >> $AXIOM_PATH/.sshconfig.new
+		echo -e "Host $name\n\tHostName $ip\n\tUser cwave\n\tPort 2266\n" >> $AXIOM_PATH/.sshconfig.new
 
 
 	done
