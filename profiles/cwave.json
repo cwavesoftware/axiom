@@ -1,0 +1,12 @@
+{
+	"name":"cwave",
+	"description":"My custom tools and settins",
+	"install": [
+    "echo 'Installing ...'",
+    "GO111MODULE=on go install github.com/jaeles-project/gospider@latest"
+	],
+	"uninstall":[
+    "echo 'Uninstalling ...'"
+	],
+    "notes":"cwave profile deployed"
+}
